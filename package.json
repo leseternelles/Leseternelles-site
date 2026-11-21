@@ -1,0 +1,9 @@
+{
+  "name": "leseternelles-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site Les Éternelles : pages statiques et fonction d'envoi du formulaire de contact",
+  "dependencies": {
+    "nodemailer": "^6.9.16"
+  }
+}
