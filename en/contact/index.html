@@ -129,7 +129,7 @@ button.btn[disabled]{opacity:.6;cursor:wait}
 <footer class="foot dark" style="padding-block:28px"><div class="wrap"><span style="font-size:16px;opacity:.88">EARL Les Éternelles · Saint-Nizier-le-Bouchoux (01)</span></div></footer>
 <script>
 (function(){
-  var SUBJ={"general": "Information request", "lesson": "Lesson booking", "voucher-cabaret": "Gift voucher order: the cabaret", "voucher-stays": "Gift voucher order: the unusual stays", "voucher-lessons": "Gift voucher order: lessons and courses", "course": "Course request: on site or off site", "mobilehome": "Booking: mobile home", "cabaret": "Booking: CABA'BRESSE cabaret (May-June 2027)", "seminar": "Corporate seminar request", "horses": "Information request: horses", "dalmatians": "Information request: Dalmatian breeding", "team": "Get in touch: Bérangère Remillier"}, M={"err_fields": "Please check the fields marked in red.", "err_rate": "Too many requests sent. Please try again in a few minutes.", "err_send": "Sorry, the message could not be sent. You can write to us directly at events@leseternelles.com or call +33 (0)6 42 78 70 81.", "need": "Required field", "bad_email": "Invalid email address", "sending": "Sending…", "send": "Send"};
+  var SUBJ={"general": "Information request", "lesson": "Lesson booking", "voucher-cabaret": "Gift voucher order: the cabaret", "voucher-stays": "Gift voucher order: the unusual stays", "voucher-lessons": "Gift voucher order: lessons and courses", "course": "Course request: on site or off site", "mobilehome": "Booking: mobile home", "cabaret": "Booking: CABA'BRESSE cabaret (May-June 2027)", "seminar": "Corporate seminar request", "horses": "Information request: horses", "dalmatians": "Information request: Dalmatian breeding", "team": "Get in touch: Bérangère Remillier"}, M={"err_fields": "Please check the fields marked in red.", "err_rate": "Too many requests sent. Please try again in a few minutes.", "err_send": "Sorry, the message could not be sent. You can write to us directly at events@leseternelles.com or call +33 (0)6 42 78 70 81.", "need": "Required field", "bad_email": "Invalid email address", "bad_phone": "Invalid number (digits, +, spaces only)", "sending": "Sending…", "send": "Send"};
   var q=new URLSearchParams(location.search), key=q.get('s')||'general';
   var f=document.getElementById('f'), sub=document.getElementById('subject');
   sub.value=SUBJ[key]||SUBJ.general;
@@ -145,7 +145,7 @@ button.btn[disabled]{opacity:.6;cursor:wait}
     function chk(name,cond,text){bad(name,!cond,text); if(!cond){ok=false; if(!firstBad) firstBad=name;}}
     chk('first',!!v.first,M.need); chk('last',!!v.last,M.need);
     chk('email',/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email), v.email?M.bad_email:M.need);
-    chk('subject',!!v.subject,M.need); chk('message',v.message.length>=3,M.need);
+    chk('phone',!v.phone||/^[0-9+().\-\s]{6,40}$/.test(v.phone),M.bad_phone); chk('subject',!!v.subject,M.need); chk('message',v.message.length>=3,M.need);
     chk('consent',f.consent.checked,M.need);
     if(!ok){show(M.err_fields); var el=f.querySelector('[data-f="'+firstBad+'"] input, [data-f="'+firstBad+'"] textarea'); if(el) el.focus(); return;}
     go.disabled=true; go.textContent=M.sending;
@@ -154,7 +154,7 @@ button.btn[disabled]{opacity:.6;cursor:wait}
     .then(function(x){
       if(x.j&&x.j.ok){f.hidden=true; var d=document.getElementById('done'); d.hidden=false; d.scrollIntoView({behavior:'smooth',block:'center'}); return;}
       go.disabled=false; go.textContent=M.send;
-      if(x.s===400) show(M.err_fields); else if(x.s===429) show(M.err_rate); else show(M.err_send);
+      if(x.s===400){ show(M.err_fields); var fl=(x.j&&x.j.fields)||[]; for(var i=0;i<fl.length;i++) bad(fl[i],true,fl[i]==='email'?M.bad_email:fl[i]==='phone'?M.bad_phone:M.need); } else if(x.s===429) show(M.err_rate); else show(M.err_send);
     })
     .catch(function(){go.disabled=false; go.textContent=M.send; show(M.err_send);});
   });
