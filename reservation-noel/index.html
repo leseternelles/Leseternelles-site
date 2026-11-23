@@ -133,11 +133,11 @@ button.btn[disabled]{opacity:.6;cursor:wait}
 
     <form id="f" class="formcard" novalidate>
       <div class="tix" data-f="people">
-        <div class="tx"><div class="nm"><b id="n-a">Adulte</b><span>Plein tarif · <strong>15 €</strong></span><span id="st-a" style="font-weight:700;color:#C80F5F"></span></div>
+        <div class="tx"><div class="nm"><b id="n-a">Adulte</b><span>Plein tarif · <strong>15 €</strong></span></div>
           <div class="step" role="group" aria-labelledby="n-a"><button type="button" data-k="a" data-d="-1" aria-label="−1 Adulte">−</button><output id="o-a" aria-live="polite">0</output><button type="button" data-k="a" data-d="1" aria-label="+1 Adulte">+</button></div></div>
-        <div class="tx"><div class="nm"><b id="n-k">Enfant</b><span>De 5 à 12 ans · <strong>10 €</strong></span><span id="st-k" style="font-weight:700;color:#C80F5F"></span></div>
+        <div class="tx"><div class="nm"><b id="n-k">Enfant</b><span>De 5 à 12 ans · <strong>10 €</strong></span></div>
           <div class="step" role="group" aria-labelledby="n-k"><button type="button" data-k="k" data-d="-1" aria-label="−1 Enfant">−</button><output id="o-k" aria-live="polite">0</output><button type="button" data-k="k" data-d="1" aria-label="+1 Enfant">+</button></div></div>
-        <div class="tx"><div class="nm"><b id="n-s">Moins de 5 ans</b><span>Gratuit, place à réserver · <strong>0 €</strong></span><span id="st-s" style="font-weight:700;color:#C80F5F"></span></div>
+        <div class="tx"><div class="nm"><b id="n-s">Moins de 5 ans</b><span>Gratuit, place à réserver · <strong>0 €</strong></span></div>
           <div class="step" role="group" aria-labelledby="n-s"><button type="button" data-k="s" data-d="-1" aria-label="−1 Moins de 5 ans">−</button><output id="o-s" aria-live="polite">0</output><button type="button" data-k="s" data-d="1" aria-label="+1 Moins de 5 ans">+</button></div></div>
       </div>
       <div class="total"><span>Total à payer</span><b id="tot">0 €</b></div>
@@ -171,30 +171,20 @@ button.btn[disabled]{opacity:.6;cursor:wait}
 <footer class="foot dark" style="padding-block:28px"><div class="wrap"><span style="font-size:16px;opacity:.88">EARL Les Éternelles · Saint-Nizier-le-Bouchoux (01)</span></div></footer>
 <script>
 (function(){
-  var T={"lang": "fr", "need": "À remplir.", "bad_email": "Adresse e-mail non valide.", "bad_phone": "Numéro non valide.", "err_fields": "Merci de corriger les champs signalés.", "err_people": "Ajoutez au moins un adulte (maximum 40 places).", "err_rate": "Trop de tentatives. Réessayez dans quelques minutes.", "soldout": "Complet", "few": "Plus que {n} places", "err_full": "Il ne reste pas assez de places pour cette demande. Places restantes : adultes {a}, enfants {k}, moins de 5 ans {s}.", "err_seats": "Les places ne peuvent pas être vérifiées pour le moment. Réessayez dans un instant ou appelez le 06 42 78 70 81.", "err_closed": "La réservation en ligne est fermée. Appelez le 06 42 78 70 81.", "err_send": "Le paiement n'a pas pu être ouvert. Réessayez, ou appelez le 06 42 78 70 81.", "pay": "Payer", "paying": "Ouverture du paiement…", "free": "Ajoutez au moins un adulte.", "r_wait": "Nous vérifions votre paiement…", "r_ok": "Paiement reçu : votre réservation est confirmée.", "r_ok2": "Un e-mail de confirmation vous est envoyé. Pensez à regarder dans vos courriers indésirables s'il tarde.", "r_pend": "Votre paiement n'est pas encore confirmé. Si vous venez de payer, patientez quelques instants puis actualisez cette page.", "r_fail": "Le paiement n'a pas abouti. Aucune somme n'est débitée. Vous pouvez recommencer.", "r_unknown": "Réservation introuvable.", "dec": ",", "u": ["adulte", "adultes"]};
-  var PRICE={a:15,k:10,s:0}, MAXP=20, MAXS=40, N={a:0,k:0,s:0}, LEFT=null, CLOSED=false;
+  var T={"lang": "fr", "need": "À remplir.", "bad_email": "Adresse e-mail non valide.", "bad_phone": "Numéro non valide.", "err_fields": "Merci de corriger les champs signalés.", "err_people": "Ajoutez au moins un adulte (maximum 40 places).", "err_rate": "Trop de tentatives. Réessayez dans quelques minutes.", "err_closed": "La réservation en ligne est fermée. Appelez le 06 42 78 70 81.", "err_send": "Le paiement n'a pas pu être ouvert. Réessayez, ou appelez le 06 42 78 70 81.", "pay": "Payer", "paying": "Ouverture du paiement…", "free": "Ajoutez au moins un adulte.", "r_wait": "Nous vérifions votre paiement…", "r_ok": "Paiement reçu : votre réservation est confirmée.", "r_ok2": "Un e-mail de confirmation vous est envoyé. Pensez à regarder dans vos courriers indésirables s'il tarde.", "r_pend": "Votre paiement n'est pas encore confirmé. Si vous venez de payer, patientez quelques instants puis actualisez cette page.", "r_fail": "Le paiement n'a pas abouti. Aucune somme n'est débitée. Vous pouvez recommencer.", "r_unknown": "Réservation introuvable.", "dec": ",", "u": ["adulte", "adultes"]};
+  var PRICE={a:15,k:10,s:0}, MAXP=20, MAXS=40, N={a:0,k:0,s:0};
   var f=document.getElementById('f'), msg=document.getElementById('msg'), go=document.getElementById('go'), tot=document.getElementById('tot');
   function money(n){return T.lang==='en'?'€'+n:String(n)+' €';}
   function seats(){return N.a+N.k+N.s;}
-  function cap(k){return LEFT?Math.min(MAXP,LEFT[k]):MAXP;}
   function paint(){
-    for(var k in N){
-      if(N[k]>cap(k)) N[k]=cap(k);
-      document.getElementById('o-'+k).textContent=N[k];
-      var pl=f.querySelector('button[data-k="'+k+'"][data-d="1"]'); pl.disabled=(N[k]>=cap(k)||seats()>=MAXS); pl.style.opacity=pl.disabled?'.35':''; pl.style.cursor=pl.disabled?'not-allowed':'';
-      var st=document.getElementById('st-'+k); if(LEFT&&LEFT[k]===0) st.textContent=T.soldout; else if(LEFT&&LEFT[k]<=20) st.textContent=T.few.replace('{n}',LEFT[k]); else st.textContent='';
-    }
+    for(var k in N) document.getElementById('o-'+k).textContent=N[k];
     var sum=N.a*PRICE.a+N.k*PRICE.k; tot.textContent=money(sum);
     go.textContent=T.pay+(sum?' '+money(sum):'');
-    go.disabled=CLOSED;
   }
-  fetch('/api/reservation?avail=1').then(function(r){return r.json();}).then(function(j){
-    if(j&&j.ok){ LEFT=j.left||null; if(j.open===false){CLOSED=true; show(T.err_closed);} paint(); }
-  }).catch(function(){});
   Array.prototype.forEach.call(f.querySelectorAll('.step button'),function(b){
     b.addEventListener('click',function(){
       var k=b.getAttribute('data-k'), d=Number(b.getAttribute('data-d')), v=N[k]+d;
-      if(v<0||v>cap(k)||seats()+d>MAXS) return;
+      if(v<0||v>MAXP||seats()+d>MAXS) return;
       N[k]=v; paint(); bad('people',false); msg.hidden=true;
     });
   });
@@ -220,7 +210,7 @@ button.btn[disabled]{opacity:.6;cursor:wait}
       if(x.j&&x.j.ok&&x.j.url){location.href=x.j.url; return;}
       go.disabled=false; paint();
       if(x.s===400){ show(T.err_fields); var fl=(x.j&&x.j.fields)||[]; for(var i=0;i<fl.length;i++) bad(fl[i],true,fl[i]==='email'?T.bad_email:fl[i]==='phone'?T.bad_phone:fl[i]==='people'?T.err_people:T.need); }
-      else if(x.s===429) show(T.err_rate); else if(x.s===409&&x.j&&x.j.error==='full'){ LEFT=x.j.left; paint(); show(T.err_full.replace('{a}',LEFT.a).replace('{k}',LEFT.k).replace('{s}',LEFT.s)); } else if(x.s===409) show(T.err_closed); else if(x.s===503&&x.j&&x.j.error==='seats') show(T.err_seats); else show(T.err_send);
+      else if(x.s===429) show(T.err_rate); else if(x.s===409) show(T.err_closed); else show(T.err_send);
     })
     .catch(function(){go.disabled=false; paint(); show(T.err_send);});
   });

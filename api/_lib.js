@@ -17,10 +17,7 @@ const SHOW = {
   priceAdult: 1500,
   priceChild: 1000,
   maxPerPerson: 20,
-  maxSeats: 40, // par réservation
-  // Jauge totale du spectacle : 300 places
-  cap: { a: 150, k: 100, s: 50 },
-  holdMinutes: 30, // places gardées le temps de payer
+  maxSeats: 40,
 };
 
 function salesOpen() {
