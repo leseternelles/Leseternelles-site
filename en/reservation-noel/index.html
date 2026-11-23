@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book — Magie de Noël — Les Éternelles</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;font-family:Calibri,'Carlito',system-ui,sans-serif;font-size:18px;line-height:1.55;background:#FFFFFF;color:#0D0D0D}
+*{box-sizing:border-box}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:max(20px,env(safe-area-inset-left,0px))}
+.sec{padding-block:clamp(56px,9vw,104px)}
+.dark{background:#0D0D0D;color:#FFFFFF}
+.pink{background:#ED1770;color:#0D0D0D}
+.light{background:#FFFFFF;color:#0D0D0D}
+.mist{background:#F3F3F3;color:#0D0D0D}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:0 0 14px}
+.dark .eyebrow{color:#ED1770}
+.pink .eyebrow{color:#0D0D0D}
+.light .eyebrow,.mist .eyebrow{color:#C80F5F}
+h1,h2,h3{font-family:Calibri,'Carlito',sans-serif;font-weight:700;line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(44px,7.4vw,96px);text-transform:uppercase}
+h2{font-size:clamp(36px,5.2vw,64px);text-transform:uppercase}
+h3{font-size:26px;line-height:1.1}
+p{margin:0}
+.lead{font-size:clamp(19px,2vw,22px);max-width:60ch}
+.head{display:flex;flex-direction:column;gap:16px;margin-bottom:48px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}
+.card{display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:4px;min-width:0}
+.light .card{background:#F3F3F3}
+.mist .card{background:#FFFFFF}
+.dark .card{background:#1C1C1C}
+.pink .card{background:#0D0D0D;color:#FFFFFF}
+.card p{font-size:17px;opacity:.92}
+.ph{position:relative;display:flex;align-items:flex-end;min-height:220px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(135deg,#DADADA 0 14px,#E6E6E6 14px 28px)}
+.mist .ph{background:repeating-linear-gradient(135deg,#E2E2E2 0 14px,#EDEDED 14px 28px)}
+.dark .ph,.pink .ph{background:repeating-linear-gradient(135deg,#2A2A2A 0 14px,#333333 14px 28px)}
+.ph span{margin:12px;padding:4px 10px;border-radius:3px;font-size:14px;font-weight:700;background:#ED1770;color:#0D0D0D}
+.tag{display:inline-block;align-self:flex-start;padding:3px 10px;border-radius:3px;font-size:14px;font-weight:700;letter-spacing:.04em;background:#ED1770;color:#0D0D0D}
+.slot{font-size:15px;font-weight:700;padding:8px 12px;border-radius:3px;border:1px dashed currentColor;opacity:.85}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 26px;border-radius:3px;font-weight:700;font-size:17px;text-decoration:none}
+.btn-pink{background:#ED1770;color:#0D0D0D}
+.btn-pink:hover{background:#FF4D94}
+.btn-line{border:2px solid currentColor}
+.btn-line:hover{background:rgba(255,255,255,.12)}
+.nav a{text-decoration:none;font-size:17px;font-weight:700;padding:10px 4px;border-bottom:3px solid transparent}
+.nav a:hover{border-bottom-color:#ED1770}
+.fact{display:flex;flex-direction:column;gap:2px;padding-left:16px;border-left:4px solid #ED1770}
+.fact b{font-size:44px;line-height:1;font-weight:700}
+.fact span{font-size:15px;opacity:.88}
+.row{display:flex;flex-wrap:wrap;gap:16px}
+.date{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:16px 0;border-top:2px solid #0D0D0D}
+.foot a{font-size:16px;opacity:.88;text-decoration:none}
+.foot a:hover{opacity:1;text-decoration:underline}
+
+.langbar{background:#0D0D0D;color:#FFFFFF}
+.langbar .wrap{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-height:40px}
+.langbar span.lb{font-size:14px;opacity:.75;margin-right:4px}
+.langbar a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:32px;padding:0 12px;border-radius:3px;font-size:15px;font-weight:700;letter-spacing:.06em;text-decoration:none;border:2px solid rgba(255,255,255,.55)}
+.langbar a:hover{background:rgba(255,255,255,.14)}
+.langbar a[aria-current="true"]{background:#ED1770;border-color:#ED1770;color:#0D0D0D}
+
+[hidden]{display:none!important}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media(max-width:640px){.fgrid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:16px;font-weight:700}
+.field .opt{font-weight:400;opacity:.7}
+.field input,.field textarea{font:inherit;font-size:18px;width:100%;min-height:52px;padding:12px 14px;border:2px solid #0D0D0D;border-radius:3px;background:#FFFFFF;color:#0D0D0D}
+.field textarea{min-height:180px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:3px solid #ED1770;outline-offset:1px}
+.field.bad input,.field.bad textarea{border-color:#C80F0F;background:#FFF4F4}
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:16px}
+.consent input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:#ED1770}
+.formcard{background:#FFFFFF;border-radius:4px;padding:clamp(20px,4vw,40px);display:flex;flex-direction:column;gap:22px}
+.notice{padding:14px 16px;border-radius:3px;font-size:17px;font-weight:700}
+.notice.err{background:#FFE9E9;color:#7A0000;border:2px solid #C80F0F}
+.notice.ok{background:#E9FFF1;color:#0B5B2A;border:2px solid #1B9E4B}
+button.btn{border:0;cursor:pointer;font-family:inherit}
+button.btn[disabled]{opacity:.6;cursor:wait}
+
+.poster{display:block;width:100%;max-width:min(340px,60vw);height:auto;border-radius:4px}
+.top{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.top .info{flex:1 1 320px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.tix{display:flex;flex-direction:column;gap:0}
+.tx{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-top:2px solid #0D0D0D}
+.tx:first-child{border-top:0}
+.tx .nm{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tx .nm b{font-size:21px;line-height:1.15}
+.tx .nm span{font-size:15px;opacity:.85}
+.step{display:flex;align-items:center;gap:0;flex:none}
+.step button{width:52px;height:52px;border:2px solid #0D0D0D;background:#FFFFFF;color:#0D0D0D;font:inherit;font-size:28px;font-weight:700;line-height:1;cursor:pointer;padding:0}
+.step button:first-child{border-radius:3px 0 0 3px}
+.step button:last-child{border-radius:0 3px 3px 0}
+.step button:hover{background:#FFE3EE}
+.step button:focus-visible{outline:3px solid #ED1770;outline-offset:1px}
+.step output{display:flex;align-items:center;justify-content:center;min-width:56px;height:52px;border-block:2px solid #0D0D0D;font-size:22px;font-weight:700;background:#FFFFFF}
+.total{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:16px 18px;background:#0D0D0D;color:#FFFFFF;border-radius:3px}
+.total b{font-size:34px;line-height:1}
+.safe{font-size:15px;opacity:.85}
+.small{font-size:14px;opacity:.8}
+.sbox{display:flex;flex-direction:column;gap:14px}
+</style>
+</head><body style="margin:0">
+<div class="langbar"><div class="wrap"><span class="lb">Language</span><a id="lk-fr" href="../../reservation-noel/" hreflang="fr" lang="fr" aria-label="Français">FR</a><a id="lk-en" href="./" hreflang="en" lang="en" aria-label="English" aria-current="true">EN</a></div></div>
+<header class="light" style="padding-block:12px;border-bottom:4px solid #ED1770">
+  <div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 32px">
+    <a href="../" aria-label="Les Éternelles" style="display:block;line-height:0"><img src="../../assets/b63073f461770acdffb76d8f059a491b.png" alt="Les Éternelles" style="height:76px;width:auto;max-width:100%"></a>
+    <nav class="nav"><a href="../#noel">← Back to the site</a></nav>
+  </div>
+</header>
+<main class="mist sec">
+  <div class="wrap" style="max-width:960px;display:flex;flex-direction:column;gap:32px">
+    <div class="top">
+      <div class="info">
+        <p class="eyebrow">Christmas show</p>
+        <h1 style="font-size:clamp(38px,6vw,68px)">Book your seats</h1>
+        <p class="lead">Magie de Noël, an equestrian show with a visit from Santa. Sunday 20 December 2026 at 4 pm, Saint-Nizier-le-Bouchoux (Ain, France).</p>
+        <div class="fact"><b style="font-size:26px">Sunday 20 December 2026, 4 pm</b><span>Saint-Nizier-le-Bouchoux (Ain, France)</span></div>
+      </div>
+      <img class="poster" src="../../assets/magie-de-noel-2026-affiche.jpg" alt="Poster of the Magie de Noël equestrian show">
+    </div>
+
+    <div id="res" class="formcard" hidden>
+      <div id="rmsg" class="notice" role="status"></div>
+      <p id="rinfo"></p>
+      <p class="small" id="rref"></p>
+      <div class="row"><a id="rretry" class="btn btn-pink" href="./" hidden>Try again</a><a class="btn btn-line" style="color:#0D0D0D" href="../">Back to the site</a></div>
+    </div>
+
+    <form id="f" class="formcard" novalidate>
+      <div class="tix" data-f="people">
+        <div class="tx"><div class="nm"><b id="n-a">Adult</b><span>Full price · <strong>€15</strong></span></div>
+          <div class="step" role="group" aria-labelledby="n-a"><button type="button" data-k="a" data-d="-1" aria-label="−1 Adult">−</button><output id="o-a" aria-live="polite">0</output><button type="button" data-k="a" data-d="1" aria-label="+1 Adult">+</button></div></div>
+        <div class="tx"><div class="nm"><b id="n-k">Child</b><span>Ages 5 to 12 · <strong>€10</strong></span></div>
+          <div class="step" role="group" aria-labelledby="n-k"><button type="button" data-k="k" data-d="-1" aria-label="−1 Child">−</button><output id="o-k" aria-live="polite">0</output><button type="button" data-k="k" data-d="1" aria-label="+1 Child">+</button></div></div>
+        <div class="tx"><div class="nm"><b id="n-s">Under 5</b><span>Free, seat to be booked · <strong>€0</strong></span></div>
+          <div class="step" role="group" aria-labelledby="n-s"><button type="button" data-k="s" data-d="-1" aria-label="−1 Under 5">−</button><output id="o-s" aria-live="polite">0</output><button type="button" data-k="s" data-d="1" aria-label="+1 Under 5">+</button></div></div>
+      </div>
+      <div class="total"><span>Total to pay</span><b id="tot">0 €</b></div>
+      <h3>Your details</h3>
+      <div class="fgrid">
+        <div class="field" data-f="first"><label for="first">First name</label><input id="first" name="first" type="text" autocomplete="given-name" maxlength="60" required></div>
+        <div class="field" data-f="last"><label for="last">Last name</label><input id="last" name="last" type="text" autocomplete="family-name" maxlength="60" required></div>
+        <div class="field" data-f="phone"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="30" required></div>
+        <div class="field" data-f="email"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" maxlength="120" required></div>
+        <p class="small full" style="grid-column:1/-1">Your confirmation and ticket are sent to this address.</p>
+        <div class="field hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+      </div>
+      <div class="field" data-f="consent"><label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required><span>I agree that Les Éternelles uses this information to handle my booking. It is never sold or passed on to third parties.</span></label></div>
+      <div id="msg" class="notice err" role="alert" hidden></div>
+      <div class="sbox">
+        <div class="row" style="align-items:center"><button id="go" class="btn btn-pink" type="submit">Pay</button></div>
+        <p class="safe">🔒 Secure payment by SumUp: your card details are entered on the SumUp page and never pass through this website.</p>
+        <p class="small">Leisure ticket for a fixed date: under article L221-28 12° of the French Consumer Code, there is no right of withdrawal.</p>
+      </div>
+      <noscript><p class="notice err">This page needs JavaScript. Book by e-mail at events@leseternelles.com or by phone on +33 6 42 78 70 81.</p></noscript>
+    </form>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <h3>Prefer to book by phone or e-mail?</h3>
+      <div class="row" style="gap:12px 40px">
+        <div class="fact"><span>Phone</span><b style="font-size:24px">+33 (0)6 42 78 70 81</b></div>
+        <div class="fact"><span>E-mail</span><b style="font-size:24px;overflow-wrap:anywhere"><a href="mailto:events@leseternelles.com" style="text-decoration:underline">events@leseternelles.com</a></b></div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="foot dark" style="padding-block:28px"><div class="wrap"><span style="font-size:16px;opacity:.88">EARL Les Éternelles · Saint-Nizier-le-Bouchoux (01)</span></div></footer>
+<script>
+(function(){
+  var T={"lang": "en", "need": "Required.", "bad_email": "Invalid e-mail address.", "bad_phone": "Invalid number.", "err_fields": "Please correct the highlighted fields.", "err_people": "Add at least one adult (40 seats maximum).", "err_rate": "Too many attempts. Try again in a few minutes.", "err_closed": "Online booking is closed. Please call +33 6 42 78 70 81.", "err_send": "The payment page could not be opened. Try again, or call +33 6 42 78 70 81.", "pay": "Pay", "paying": "Opening payment…", "free": "Add at least one adult.", "r_wait": "Checking your payment…", "r_ok": "Payment received: your booking is confirmed.", "r_ok2": "A confirmation e-mail is on its way. Check your spam folder if it is late.", "r_pend": "Your payment is not confirmed yet. If you have just paid, wait a moment and refresh this page.", "r_fail": "The payment did not go through. Nothing was charged. You can try again.", "r_unknown": "Booking not found.", "dec": ".", "u": ["adult", "adults"]};
+  var PRICE={a:15,k:10,s:0}, MAXP=20, MAXS=40, N={a:0,k:0,s:0};
+  var f=document.getElementById('f'), msg=document.getElementById('msg'), go=document.getElementById('go'), tot=document.getElementById('tot');
+  function money(n){return T.lang==='en'?'€'+n:String(n)+' €';}
+  function seats(){return N.a+N.k+N.s;}
+  function paint(){
+    for(var k in N) document.getElementById('o-'+k).textContent=N[k];
+    var sum=N.a*PRICE.a+N.k*PRICE.k; tot.textContent=money(sum);
+    go.textContent=T.pay+(sum?' '+money(sum):'');
+  }
+  Array.prototype.forEach.call(f.querySelectorAll('.step button'),function(b){
+    b.addEventListener('click',function(){
+      var k=b.getAttribute('data-k'), d=Number(b.getAttribute('data-d')), v=N[k]+d;
+      if(v<0||v>MAXP||seats()+d>MAXS) return;
+      N[k]=v; paint(); bad('people',false); msg.hidden=true;
+    });
+  });
+  paint();
+  var t0=Date.now();
+  function bad(name,on,text){var w=f.querySelector('[data-f="'+name+'"]'); if(!w) return; w.classList.toggle('bad',on); var o=w.querySelector('.err-t'); if(o) o.remove(); if(on){var p=document.createElement('p'); p.className='err-t'; p.style.cssText='color:#C80F0F;font-size:15px;font-weight:700'; p.textContent=text; w.appendChild(p);}}
+  function show(text){msg.textContent=text; msg.hidden=false;}
+  f.addEventListener('submit',function(e){
+    e.preventDefault(); msg.hidden=true;
+    var v={first:f.first.value.trim(),last:f.last.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim()};
+    var ok=true, firstBad=null;
+    function chk(name,cond,text){bad(name,!cond,text); if(!cond){ok=false; if(!firstBad) firstBad=name;}}
+    chk('people',N.a>=1,T.free);
+    chk('first',!!v.first,T.need); chk('last',!!v.last,T.need);
+    chk('phone',/^[0-9+().\-\s]{6,30}$/.test(v.phone),v.phone?T.bad_phone:T.need);
+    chk('email',/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email),v.email?T.bad_email:T.need);
+    chk('consent',f.consent.checked,T.need);
+    if(!ok){show(T.err_fields); var el=f.querySelector('[data-f="'+firstBad+'"] input'); if(el) el.focus(); else document.querySelector('.tix').scrollIntoView({block:'center'}); return;}
+    go.disabled=true; go.textContent=T.paying;
+    fetch('/api/reservation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({first:v.first,last:v.last,phone:v.phone,email:v.email,adults:N.a,kids:N.k,small:N.s,consent:true,lang:T.lang,website:f.website.value,elapsed:Date.now()-t0})})
+    .then(function(r){return r.json().catch(function(){return {ok:false};}).then(function(j){return {s:r.status,j:j};});})
+    .then(function(x){
+      if(x.j&&x.j.ok&&x.j.url){location.href=x.j.url; return;}
+      go.disabled=false; paint();
+      if(x.s===400){ show(T.err_fields); var fl=(x.j&&x.j.fields)||[]; for(var i=0;i<fl.length;i++) bad(fl[i],true,fl[i]==='email'?T.bad_email:fl[i]==='phone'?T.bad_phone:fl[i]==='people'?T.err_people:T.need); }
+      else if(x.s===429) show(T.err_rate); else if(x.s===409) show(T.err_closed); else show(T.err_send);
+    })
+    .catch(function(){go.disabled=false; paint(); show(T.err_send);});
+  });
+
+  // Retour après paiement : /reservation-noel/?ref=NOEL2026-XXXXXXXXXX
+  var ref=new URLSearchParams(location.search).get('ref');
+  if(ref && /^NOEL2026-[A-Z0-9]{10}$/.test(ref)){
+    f.hidden=true; document.querySelector('.top').hidden=true;
+    var box=document.getElementById('res'), rm=document.getElementById('rmsg'), ri=document.getElementById('rinfo'), rr=document.getElementById('rref'), retry=document.getElementById('rretry');
+    box.hidden=false; rm.textContent=T.r_wait; rm.className='notice'; rr.textContent=ref;
+    var tries=0;
+    (function poll(){
+      fetch('/api/reservation?ref='+encodeURIComponent(ref)).then(function(r){return r.json().catch(function(){return {ok:false};});}).then(function(j){
+        if(j&&j.ok&&j.status==='PAID'){rm.textContent=T.r_ok; rm.className='notice ok'; ri.textContent=(j.basket||'')+' · '+money(Math.round(j.amount)===j.amount?j.amount:String(j.amount).replace('.',T.dec)); var p=document.createElement('p'); p.textContent=T.r_ok2; ri.after(p); return;}
+        if(j&&j.ok&&(j.status==='FAILED'||j.status==='EXPIRED')){rm.textContent=T.r_fail; rm.className='notice err'; retry.hidden=false; return;}
+        if(j&&j.ok===false&&j.error==='unknown'){rm.textContent=T.r_unknown; rm.className='notice err'; retry.hidden=false; return;}
+        if(++tries<10) return setTimeout(poll,3000);
+        rm.textContent=T.r_pend; rm.className='notice';
+      }).catch(function(){ if(++tries<10) setTimeout(poll,3000); else {rm.textContent=T.r_pend;} });
+    })();
+  }
+})();
+</script>
+</body></html>
