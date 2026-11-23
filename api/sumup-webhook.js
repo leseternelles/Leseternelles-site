@@ -3,6 +3,7 @@
 // on envoie deux e-mails : un à Les Éternelles (events@), un de confirmation au client.
 
 const { SHOW, REF_RE, sumup, transporter, clean, euro, EMAIL_RE } = require('./_lib');
+const seats = require('./_seats');
 
 const done = new Set(); // évite les doublons si SumUp rappelle (meilleur effort)
 
@@ -31,7 +32,21 @@ module.exports = async (req, res) => {
   if (process.env.SUMUP_MERCHANT_CODE && c.merchant_code && c.merchant_code !== process.env.SUMUP_MERCHANT_CODE) return res.status(200).end();
   if (done.has(c.id)) return res.status(200).end();
 
-  const [title, basket, name, email, phone] = String(c.description || '').split(' | ');
+  const [title, basket, name, email, phone, counts] = String(c.description || '').split(' | ');
+  const m = /^A(\d+) K(\d+) S(\d+)$/.exec(counts || '');
+  const [na, nk, ns] = m ? [Number(m[1]), Number(m[2]), Number(m[3])] : [0, 0, 0];
+
+  // Jauge : on compte définitivement les places (une seule fois par réservation)
+  if (seats.enabled() && m) {
+    try { await seats.markPaid(String(c.checkout_reference), na, nk, ns); }
+    catch (e) { console.error('Compteur de places indisponible :', e && e.message); return res.status(502).end(); }
+  }
+  // E-mails : une seule fois par réservation, même si SumUp rappelle
+  let mailFlag = false;
+  if (seats.enabled()) {
+    try { if (!(await seats.once(`mailed:${c.checkout_reference}`))) { done.add(c.id); return res.status(200).end(); } mailFlag = true; }
+    catch (e) { console.error('Drapeau e-mail indisponible :', e && e.message); }
+  }
   const total = euro(Math.round(Number(c.amount || 0) * 100));
   const code = String(c.checkout_reference);
   const tp = transporter();
@@ -79,7 +94,7 @@ module.exports = async (req, res) => {
   const results = await Promise.allSettled(jobs);
   const ok = results.filter((r) => r.status === 'fulfilled').length;
   results.forEach((r) => { if (r.status === 'rejected') console.error('Envoi impossible :', r.reason && r.reason.code, r.reason && r.reason.message); });
-  if (!ok) return res.status(502).end(); // aucun e-mail parti : SumUp réessaiera
+  if (!ok) { if (mailFlag) await seats.forget(`mailed:${c.checkout_reference}`).catch(() => {}); return res.status(502).end(); } // aucun e-mail parti : SumUp réessaiera
   done.add(c.id);
   if (done.size > 500) done.clear();
   return res.status(200).end();

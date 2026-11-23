@@ -5,6 +5,7 @@
 // Réglages Vercel (Settings > Environment Variables) : SUMUP_API_KEY, SUMUP_MERCHANT_CODE. Facultatifs : SITE_URL, SALES_OPEN=false pour fermer les ventes.
 
 const { clean, oneLine, EMAIL_RE, SHOW, salesOpen, newReference, REF_RE, SITE, sumup, euro, basketText } = require('./_lib');
+const seats = require('./_seats');
 
 const hits = new Map(); // limite par adresse IP (meilleur effort, remis à zéro à chaque démarrage)
 function tooMany(ip) {
@@ -40,6 +41,11 @@ async function status(req, res) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
+  if (req.method === 'GET' && req.query && req.query.avail) {
+    if (!seats.enabled()) return res.status(200).json({ ok: true, left: null, open: salesOpen() });
+    try { const r = await seats.left(); return res.status(200).json({ ok: true, left: r.left, open: salesOpen() }); }
+    catch (e) { console.error('Lecture des places impossible :', e && e.message); return res.status(200).json({ ok: true, left: null, open: salesOpen() }); }
+  }
   if (req.method === 'GET') return status(req, res);
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST');
@@ -94,7 +100,22 @@ module.exports = async (req, res) => {
     `${d.last.toUpperCase()} ${d.first}`,
     d.email,
     d.phone,
+    `A${a} K${k} S${s}`, // lu par le webhook pour compter les places
   ].join(' | ');
+
+  // Jauge : on garde les places le temps de payer (30 minutes), pour ne pas vendre deux fois les dernières.
+  let held = false;
+  if (seats.enabled()) {
+    try {
+      const h = await seats.hold(ref, a, k, s);
+      if (!h.ok) return res.status(409).json({ ok: false, error: 'full', left: h.left });
+      held = true;
+    } catch (e) {
+      console.error('Compteur de places indisponible :', e && e.message);
+      return res.status(503).json({ ok: false, error: 'seats' });
+    }
+  }
+  const until = new Date(Date.now() + SHOW.holdMinutes * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, '+00:00');
 
   try {
     const r = await sumup('/v0.1/checkouts', {
@@ -107,17 +128,20 @@ module.exports = async (req, res) => {
         description,
         redirect_url: back,
         return_url: `${site}/api/sumup-webhook`,
+        valid_until: until,
         hosted_checkout: { enabled: true },
       }),
     });
     const url = r.body && r.body.hosted_checkout_url;
     if (!r.ok || !url) {
       console.error('SumUp a refusé la création du paiement :', r.status, JSON.stringify(r.body).slice(0, 300));
+      if (held) await seats.release(ref, a, k, s).catch(() => {});
       return res.status(502).json({ ok: false, error: 'sumup' });
     }
     return res.status(200).json({ ok: true, url, ref, total: euro(cents) });
   } catch (e) {
     console.error('Création du paiement impossible :', e && e.message);
+    if (held) await seats.release(ref, a, k, s).catch(() => {});
     return res.status(502).json({ ok: false, error: 'sumup' });
   }
 };
