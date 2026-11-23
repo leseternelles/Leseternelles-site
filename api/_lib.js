@@ -37,7 +37,7 @@ const REF_RE = /^NOEL2026-[A-HJ-NP-Z2-9]{10}$/;
 const SITE = () => String(process.env.SITE_URL || 'https://leseternelles.com').replace(/\/+$/, '');
 
 async function sumup(path, options) {
-  const key = process.env.SUMUP_API_KEY;
+  const key = String(process.env.SUMUP_API_KEY || '').trim().replace(/^Bearer\s+/i, '');
   if (!key) { const e = new Error('SUMUP_API_KEY manquante'); e.code = 'not_configured'; throw e; }
   const r = await fetch(`https://api.sumup.com${path}`, {
     ...options,
