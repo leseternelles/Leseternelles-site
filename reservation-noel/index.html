@@ -154,7 +154,7 @@ button.btn[disabled]{opacity:.6;cursor:wait}
       <div id="msg" class="notice err" role="alert" hidden></div>
       <div class="sbox">
         <div class="row" style="align-items:center"><button id="go" class="btn btn-pink" type="submit">Payer</button></div>
-        <p class="safe">🔒 Paiement sécurisé par SumUp : vos coordonnées bancaires sont saisies sur la page de SumUp et ne passent jamais par ce site.</p>
+        <p class="safe">🔒 Paiement sécurisé par Stripe : vos coordonnées bancaires sont saisies sur la page de Stripe et ne passent jamais par ce site.</p>
         <p class="small">Billet de loisirs à date fixe : conformément à l'article L221-28 12° du Code de la consommation, il n'y a pas de droit de rétractation.</p>
       </div>
       <noscript><p class="notice err">Cette page a besoin de JavaScript. Réservez par mail à events@leseternelles.com ou par téléphone au 06 42 78 70 81.</p></noscript>
@@ -216,14 +216,14 @@ button.btn[disabled]{opacity:.6;cursor:wait}
   });
 
   // Retour après paiement : /reservation-noel/?ref=NOEL2026-XXXXXXXXXX
-  var ref=new URLSearchParams(location.search).get('ref');
+  var ref=new URLSearchParams(location.search).get('ref'), sid=new URLSearchParams(location.search).get('sid')||'';
   if(ref && /^NOEL2026-[A-Z0-9]{10}$/.test(ref)){
     f.hidden=true; document.querySelector('.top').hidden=true;
     var box=document.getElementById('res'), rm=document.getElementById('rmsg'), ri=document.getElementById('rinfo'), rr=document.getElementById('rref'), retry=document.getElementById('rretry');
     box.hidden=false; rm.textContent=T.r_wait; rm.className='notice'; rr.textContent=ref;
     var tries=0;
     (function poll(){
-      fetch('/api/reservation?ref='+encodeURIComponent(ref)).then(function(r){return r.json().catch(function(){return {ok:false};});}).then(function(j){
+      fetch('/api/reservation?ref='+encodeURIComponent(ref)+'&sid='+encodeURIComponent(sid)).then(function(r){return r.json().catch(function(){return {ok:false};});}).then(function(j){
         if(j&&j.ok&&j.status==='PAID'){rm.textContent=T.r_ok; rm.className='notice ok'; ri.textContent=(j.basket||'')+' · '+money(Math.round(j.amount)===j.amount?j.amount:String(j.amount).replace('.',T.dec)); var p=document.createElement('p'); p.textContent=T.r_ok2; ri.after(p); return;}
         if(j&&j.ok&&(j.status==='FAILED'||j.status==='EXPIRED')){rm.textContent=T.r_fail; rm.className='notice err'; retry.hidden=false; return;}
         if(j&&j.ok===false&&j.error==='unknown'){rm.textContent=T.r_unknown; rm.className='notice err'; retry.hidden=false; return;}

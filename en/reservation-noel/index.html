@@ -154,7 +154,7 @@ button.btn[disabled]{opacity:.6;cursor:wait}
       <div id="msg" class="notice err" role="alert" hidden></div>
       <div class="sbox">
         <div class="row" style="align-items:center"><button id="go" class="btn btn-pink" type="submit">Pay</button></div>
-        <p class="safe">🔒 Secure payment by SumUp: your card details are entered on the SumUp page and never pass through this website.</p>
+        <p class="safe">🔒 Secure payment by Stripe: your card details are entered on the Stripe page and never pass through this website.</p>
         <p class="small">Leisure ticket for a fixed date: under article L221-28 12° of the French Consumer Code, there is no right of withdrawal.</p>
       </div>
       <noscript><p class="notice err">This page needs JavaScript. Book by e-mail at events@leseternelles.com or by phone on +33 6 42 78 70 81.</p></noscript>
@@ -216,14 +216,14 @@ button.btn[disabled]{opacity:.6;cursor:wait}
   });
 
   // Retour après paiement : /reservation-noel/?ref=NOEL2026-XXXXXXXXXX
-  var ref=new URLSearchParams(location.search).get('ref');
+  var ref=new URLSearchParams(location.search).get('ref'), sid=new URLSearchParams(location.search).get('sid')||'';
   if(ref && /^NOEL2026-[A-Z0-9]{10}$/.test(ref)){
     f.hidden=true; document.querySelector('.top').hidden=true;
     var box=document.getElementById('res'), rm=document.getElementById('rmsg'), ri=document.getElementById('rinfo'), rr=document.getElementById('rref'), retry=document.getElementById('rretry');
     box.hidden=false; rm.textContent=T.r_wait; rm.className='notice'; rr.textContent=ref;
     var tries=0;
     (function poll(){
-      fetch('/api/reservation?ref='+encodeURIComponent(ref)).then(function(r){return r.json().catch(function(){return {ok:false};});}).then(function(j){
+      fetch('/api/reservation?ref='+encodeURIComponent(ref)+'&sid='+encodeURIComponent(sid)).then(function(r){return r.json().catch(function(){return {ok:false};});}).then(function(j){
         if(j&&j.ok&&j.status==='PAID'){rm.textContent=T.r_ok; rm.className='notice ok'; ri.textContent=(j.basket||'')+' · '+money(Math.round(j.amount)===j.amount?j.amount:String(j.amount).replace('.',T.dec)); var p=document.createElement('p'); p.textContent=T.r_ok2; ri.after(p); return;}
         if(j&&j.ok&&(j.status==='FAILED'||j.status==='EXPIRED')){rm.textContent=T.r_fail; rm.className='notice err'; retry.hidden=false; return;}
         if(j&&j.ok===false&&j.error==='unknown'){rm.textContent=T.r_unknown; rm.className='notice err'; retry.hidden=false; return;}

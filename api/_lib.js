@@ -36,16 +36,46 @@ const REF_RE = /^NOEL2026-[A-HJ-NP-Z2-9]{10}$/;
 
 const SITE = () => String(process.env.SITE_URL || 'https://leseternelles.com').replace(/\/+$/, '');
 
-async function sumup(path, options) {
-  const key = String(process.env.SUMUP_API_KEY || '').trim().replace(/^Bearer\s+/i, '');
-  if (!key) { const e = new Error('SUMUP_API_KEY manquante'); e.code = 'not_configured'; throw e; }
-  const r = await fetch(`https://api.sumup.com${path}`, {
-    ...options,
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', ...((options && options.headers) || {}) },
+// Corps « formulaire » attendu par Stripe : les listes et objets deviennent line_items[0][quantity]=1, metadata[a]=2, etc.
+function formBody(obj) {
+  const out = [];
+  const walk = (v, key) => {
+    if (v === undefined || v === null) return;
+    if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${key}[${i}]`));
+    else if (typeof v === 'object') Object.keys(v).forEach((k) => walk(v[k], key ? `${key}[${k}]` : k));
+    else out.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(v))}`);
+  };
+  walk(obj, '');
+  return out.join('&');
+}
+
+// Appel à l'API Stripe (clé secrète dans STRIPE_SECRET_KEY, jamais envoyée au navigateur).
+async function stripe(path, options) {
+  const key = String(process.env.STRIPE_SECRET_KEY || '').trim().replace(/^Bearer\s+/i, '');
+  if (!key) { const e = new Error('STRIPE_SECRET_KEY manquante'); e.code = 'not_configured'; throw e; }
+  const o = options || {};
+  const r = await fetch(`https://api.stripe.com${path}`, {
+    method: o.method || 'GET',
+    headers: { Authorization: `Bearer ${key}`, ...(o.data ? { 'Content-Type': 'application/x-www-form-urlencoded' } : {}) },
+    ...(o.data ? { body: formBody(o.data) } : {}),
   });
   let body = null;
   try { body = await r.json(); } catch (e) { body = null; }
   return { status: r.status, ok: r.ok, body };
+}
+
+// Vérifie la signature d'un webhook Stripe (en-tête « Stripe-Signature : t=...,v1=... »), texte brut exigé.
+function stripeSignatureOk(raw, header, secret, toleranceSeconds) {
+  const crypto = require('crypto');
+  if (!raw || !header || !secret) return false;
+  const parts = String(header).split(',').map((x) => x.trim().split('='));
+  const t = (parts.find((x) => x[0] === 't') || [])[1];
+  const sigs = parts.filter((x) => x[0] === 'v1').map((x) => x[1]).filter(Boolean);
+  if (!t || !sigs.length || !/^\d+$/.test(t)) return false;
+  if (Math.abs(Date.now() / 1000 - Number(t)) > (toleranceSeconds || 300)) return false;
+  const expected = crypto.createHmac('sha256', String(secret).trim()).update(`${t}.${raw}`, 'utf8').digest('hex');
+  const eb = Buffer.from(expected);
+  return sigs.some((sg) => { const sb = Buffer.from(sg); return sb.length === eb.length && crypto.timingSafeEqual(sb, eb); });
 }
 
 function transporter() {
@@ -71,4 +101,4 @@ function basketText(a, k, s, lang) {
   return parts.join(', ');
 }
 
-module.exports = { clean, oneLine, EMAIL_RE, SHOW, salesOpen, newReference, REF_RE, SITE, sumup, transporter, euro, basketText };
+module.exports = { clean, oneLine, EMAIL_RE, SHOW, salesOpen, newReference, REF_RE, SITE, stripe, stripeSignatureOk, transporter, euro, basketText };
