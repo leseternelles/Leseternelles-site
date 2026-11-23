@@ -26,7 +26,10 @@ async function status(req, res) {
   if (!REF_RE.test(ref)) return res.status(400).json({ ok: false, error: 'ref' });
   try {
     const r = await sumup(`/v0.1/checkouts?checkout_reference=${encodeURIComponent(ref)}`);
-    if (!r.ok) return res.status(502).json({ ok: false, error: 'sumup' });
+    if (!r.ok) {
+      console.error('SumUp a refusé la lecture du paiement :', r.status, JSON.stringify(r.body).slice(0, 300));
+      return res.status(r.status === 404 ? 404 : 502).json({ ok: false, error: r.status === 404 ? 'unknown' : 'sumup' });
+    }
     const list = Array.isArray(r.body) ? r.body : [];
     const c = list.find((x) => x && x.checkout_reference === ref) || list[0];
     if (!c) return res.status(404).json({ ok: false, error: 'unknown' });
